@@ -5,3 +5,4 @@ bin/*
 pyvenv.cfg
 include/*
 Models/__pycache__/*
+.gitignore
