@@ -72,29 +72,26 @@ def club(club_uid):
 @app.route("/upcoming")
 def upcoming():
 	events = Event.query.filter(Event.startdatetime > datetime.now()).all()
-	print(events)
-	response = {}
-	response['events'] = []
-	for event in events:
-		eventinfo = {}
-		eventinfo["name"] = event.name
-		eventinfo["uuid"] = event.uuid
-		eventinfo["startdatetime"] = event.startdatetime
-		eventinfo["enddatetime"] = event.enddatetime
-		eventinfo["description"] = event.description
-		eventinfo["venue"] = event.venue
-		eventinfo["club_id"] = event.club_id
-		eventinfo["eligibility_id"] = event.eligibility_id
-		eventinfo["department_id"] = event.department_id
-		eventinfo["reg_link"] = event.reg_link
-		eventinfo["poster"] = event.poster
-		eventinfo["isCompleted"] = event.isCompleted
-		categories = []
-		for event_category in event.event_categories:
-			category = Category.query.filter_by(id=event_category.category_id).first()
-			categories.append({"name": category.name, "id": category.id})
-		eventinfo["categories"] = categories
-		response['events'].append(eventinfo)
+	response = {
+        'events': [
+            {
+                'name': event.name,
+                'uuid': event.uuid,
+                'startdatetime': event.startdatetime,
+                'enddatetime': event.enddatetime,
+                'description': event.description,
+                'venue': event.venue,
+                'club_id': event.club_id,
+                'eligibility_id': event.eligibility_id,
+                'department_id': event.department_id,
+                'reg_link': event.reg_link,
+                'poster': event.poster,
+                'isCompleted': event.isCompleted,
+                'categories': [{'name': category.name, 'id': category.id} for event_category in event.event_categories for category in Category.query.filter_by(id=event_category.category_id).all()]
+            }
+            for event in events
+        ]
+    }
 	return response
 
 @app.route("/event/<string:event_uid>")
@@ -124,4 +121,4 @@ def event(event_uid):
 
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', debug=True)
+	app.run(host='0.0.0.0', debug=True, port=3000)
