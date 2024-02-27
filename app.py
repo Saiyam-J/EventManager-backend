@@ -16,11 +16,11 @@ from Models.event_model import Event
 from Models.winner_model import Winner
 from datetime import datetime
 
-@app.route("/")
+@app.route("/api/")
 def home():
 	return {"success":"true"}
 
-@app.route("/categories", methods=['GET'])
+@app.route("/api/categories", methods=['GET'])
 def categories():
 	categories = Category.query.all()
 	response = {}
@@ -29,7 +29,7 @@ def categories():
 		response['categories'].append({"name": category.name, "id": category.id})
 	return response
 
-@app.route("/clubs", methods=['GET'])
+@app.route("/api/clubs", methods=['GET'])
 def clubs():
 	clubs = Club.query.all()
 	response = {}
@@ -47,7 +47,7 @@ def clubs():
 		response['clubs'].append(clubinfo)
 	return response
 
-@app.route("/departments", methods=['GET'])
+@app.route("/api/departments", methods=['GET'])
 def departments():
 	departments = Department.query.all()
 	response = {}
@@ -66,12 +66,12 @@ def departments():
 					dep['subdepartments'].append({"name":department.name, "id":department.id})
 	return response
 
-@app.route("/club/<string:club_uid>")
+@app.route("/api/club/<string:club_uid>")
 def club(club_uid):
 	club = Club.query.filter_by(uuid=club_uid).first()
 	response = {}
 
-@app.route("/upcoming")
+@app.route("/api/upcoming")
 def upcoming():
 	events = Event.query.filter(Event.startdatetime > datetime.now()).all()
 	response = {
@@ -96,7 +96,7 @@ def upcoming():
     }
 	return response
 
-@app.route("/event/<string:event_uid>")
+@app.route("/api/event/<string:event_uid>")
 def event(event_uid):
 	event = Event.query.filter_by(uuid=event_uid).first()
 	response = {}
