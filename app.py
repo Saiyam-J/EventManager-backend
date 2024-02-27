@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
+from flask_cors import CORS
 import os
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@localhost:3306/{}'.format(os.environ['DB_USER'], os.environ['DB_PASS'], os.environ['DB_NAME'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+CORS(app)
 from Models.category_model import Category
 from Models.club_model import Club
 from Models.department_model import Department
