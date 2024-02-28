@@ -90,7 +90,6 @@ def upcoming():
                 'department_id': event.department_id,
                 'reg_link': event.reg_link,
                 'poster': event.poster,
-                'isCompleted': event.isCompleted,
                 'categories': [{'name': category.name, 'id': category.id} for event_category in event.event_categories for category in Category.query.filter_by(id=event_category.category_id).all()]
             }
             for event in events
@@ -113,7 +112,6 @@ def event(event_uid):
 	response["department_id"] = event.department_id
 	response["reg_link"] = event.reg_link
 	response["poster"] = event.poster
-	response["isCompleted"] = event.isCompleted
 	categories = []
 	for event_category in event.event_categories:
 		category = Category.query.filter_by(id=event_category.category_id).first()
