@@ -8,7 +8,6 @@ class Event(db.Model):
 	reg_link = db.Column(db.String(250), nullable=False)
 	venue = db.Column(db.String(250), nullable=False)
 	startdatetime = db.Column(db.DateTime, nullable=False)
-	isCompleted = db.Column(db.Integer, nullable=False)
 	enddatetime = db.Column(db.DateTime, nullable=False)
 	club_id = db.Column(db.Integer, db.ForeignKey('clubs.id'))
 	eligibility_id = db.Column(db.Integer, db.ForeignKey('eligibilities.id'))

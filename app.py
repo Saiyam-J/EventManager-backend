@@ -14,7 +14,7 @@ from Models.eligibility_model import Eligibility
 from Models.event_category_model import Event_category
 from Models.event_model import Event
 from Models.winner_model import Winner
-from datetime import datetime
+from datetime import datetime, timedelta
 
 @app.route("/api/")
 def home():
@@ -73,7 +73,9 @@ def club(club_uid):
 
 @app.route("/api/upcoming")
 def upcoming():
-	events = Event.query.filter(Event.startdatetime > datetime.now()).all()
+	utc = datetime.now()
+	indian = utc + timedelta(hours=5, minutes=30)
+	events = Event.query.filter(Event.startdatetime > indian).all()
 	response = {
         'events': [
             {
