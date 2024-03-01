@@ -14,7 +14,7 @@ from Models.eligibility_model import Eligibility
 from Models.event_category_model import Event_category
 from Models.event_model import Event
 from Models.winner_model import Winner
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 @app.route("/api/")
 def home():
@@ -118,6 +118,109 @@ def event(event_uid):
 		categories.append({"name": category.name, "id": category.id})
 	response["categories"] = categories
 
+	return response
+
+@app.route("/api/eventson/<string:date>")
+def eventon(date):
+	from sqlalchemy import and_
+	date = datetime.strptime(date, '%Y-%m-%d')
+	events = Event.query.filter(and_(Event.startdatetime > date, Event.startdatetime < date + timedelta(days=1))).all()
+	response = {
+		'events': [
+			{
+				'name': event.name,
+				'uuid': event.uuid,
+				'startdatetime': event.startdatetime,
+				'enddatetime': event.enddatetime,
+				'description': event.description,
+				'venue': event.venue,
+				'club_id': event.club_id,
+				'eligibility_id': event.eligibility_id,
+				'department_id': event.department_id,
+				'reg_link': event.reg_link,
+				'poster': event.poster,
+				'categories': [{'name': category.name, 'id': category.id} for event_category in event.event_categories for category in Category.query.filter_by(id=event_category.category_id).all()]
+			}
+			for event in events
+		]
+	}
+	return response
+
+@app.route("/api/eventsafter/<string:date>")
+def eventafter(date):
+	date = datetime.strptime(date, '%Y-%m-%d')
+	events = Event.query.filter(Event.startdatetime > date).all()
+	response = {
+		'events': [
+			{
+				'name': event.name,
+				'uuid': event.uuid,
+				'startdatetime': event.startdatetime,
+				'enddatetime': event.enddatetime,
+				'description': event.description,
+				'venue': event.venue,
+				'club_id': event.club_id,
+				'eligibility_id': event.eligibility_id,
+				'department_id': event.department_id,
+				'reg_link': event.reg_link,
+				'poster': event.poster,
+				'categories': [{'name': category.name, 'id': category.id} for event_category in event.event_categories for category in Category.query.filter_by(id=event_category.category_id).all()]
+			}
+			for event in events
+		]
+	}
+	return response
+
+@app.route("/api/eventsbetween/<string:startdate>/<string:enddate>")
+def eventsbetween(startdate, enddate):
+	from sqlalchemy import and_
+	startdate = datetime.strptime(startdate, '%Y-%m-%d')
+	enddate = datetime.strptime(enddate, '%Y-%m-%d')
+	events = Event.query.filter(and_(Event.startdatetime > startdate, Event.startdatetime < enddate)).all()
+	response = {
+		'events': [
+			{
+				'name': event.name,
+				'uuid': event.uuid,
+				'startdatetime': event.startdatetime,
+				'enddatetime': event.enddatetime,
+				'description': event.description,
+				'venue': event.venue,
+				'club_id': event.club_id,
+				'eligibility_id': event.eligibility_id,
+				'department_id': event.department_id,
+				'reg_link': event.reg_link,
+				'poster': event.poster,
+				'categories': [{'name': category.name, 'id': category.id} for event_category in event.event_categories for category in Category.query.filter_by(id=event_category.category_id).all()]
+			}
+			for event in events
+		]
+	}
+	return response
+
+@app.route("/api/eventsbefore/<string:date>")
+def eventsbefore(date):
+	date = datetime.strptime(date, '%Y-%m-%d')
+	events = Event.query.filter(Event.startdatetime < date).all()
+	response = {
+		'events': [
+			{
+				'name': event.name,
+				'uuid': event.uuid,
+				'startdatetime': event.startdatetime,
+				'enddatetime': event.enddatetime,
+				'description': event.description,
+				'venue': event.venue,
+				'club_id': event.club_id,
+				'eligibility_id': event.eligibility_id,
+				'department_id': event.department_id,
+				'reg_link': event.reg_link,
+				'poster': event.poster,
+				'categories': [{'name': category.name, 'id': category.id} for event_category in event.event_categories for category in Category.query.filter_by(id=event_category.category_id).all()]
+			}
+			for event in events
+		]
+	}
 	return response
 
 
